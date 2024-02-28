@@ -1,0 +1,101 @@
+body {
+    display: grid;
+    grid-template-columns: 25% auto;
+    height: 100vh;
+}
+
+.hide {
+    display: none;
+}
+
+.left {
+    display: grid;
+    grid-template-rows: 49px auto;
+    border: 1px red solid;
+}
+
+.right {
+    display: grid;
+    grid-template-rows: 49px auto;
+    border: 1px blue solid;
+}
+
+.workspace-name {
+    padding: 5px 20px;
+    border: 1px green solid;
+    line-height: 39px;
+}
+
+.channels {
+    display: grid;
+    grid-template-rows: repeat(auto-fill, minmax(30px, 1fr));
+    gap: 5px;
+    border: 1px purple solid;
+}
+
+.channel {
+    padding: 5px 35px;
+    background-color: aqua;
+}
+
+.channel-name {
+    padding: 5px 20px;
+    border: 1px green solid;
+    line-height: 39px;
+}
+
+.messages-container {
+    display: flex;
+    flex-direction: row;
+    padding: 0px 20px;
+    background-color: pink;
+}
+
+.message {
+    display: grid;
+	grid-template-columns: auto auto;
+	border: 1px black solid;
+}
+
+.message-avatar {
+	width: 40px;
+	height: 40px;
+	background-color: #ccc;
+	border-radius: 25%;
+	margin: 5px;
+}
+
+.message-content {
+	display: grid;
+	grid-template-rows: max-content max-content max-content;
+	gap: 0px;
+}
+
+.message-user-time {
+	display: grid;
+	grid-template-columns: max-content auto;
+	border: 1px black dashed;
+	gap: 5px;
+}
+
+.message-user {
+	/* 400=normal 700=bold*/
+	font-weight: 600; 
+	height: 16px;
+	/* margin: 0px 5px; */
+}
+
+.message-time {
+	color: gray;
+	font-size: 16px;
+	text-align: left;
+}
+
+.message-text {
+}
+
+.replies-avatar-container {
+	display: grid;
+	grid-template-columns: max-content max-content max-content max-content;
+	gap: 10px;
+}
