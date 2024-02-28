@@ -16,3 +16,26 @@ def check_name_availbility(name):
     data = (name,)
     row = db.query_db(sql, data, one=True)
     return False if row else True
+
+def login(name, password):
+    sql = """
+    SELECT api_key FROM users WHERE name = ? and password = ?
+    """
+    data = (name, password)
+    row = db.query_db(sql, data, one=True)
+    if row:
+        return row['api_key']
+    else:
+        return None
+
+def check_api_key(api_key):
+    sql = """
+    SELECT * FROM users WHERE api_key = ?
+    """
+
+    data = (api_key,)
+    row = db.query_db(sql, data, one=True)
+    if row:
+        return row
+    else:
+        return None

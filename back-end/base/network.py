@@ -10,3 +10,8 @@ def return_with_fail(msg=""):
         "status": "fail",
         "msg": msg
     })
+
+def return_with_unauthorized():
+    return jsonify({
+        "status": "unauthorized"
+    })
