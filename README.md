@@ -1,3 +1,7 @@
+webpage is at front-end/app-4/index.html
+
+backend is at back-end/app.py
+
 # Final Project: Belay (a Slack clone)
 
 40 points
