@@ -6,7 +6,7 @@
 
 .splash-two {
   display: grid;
-  grid-template-columns: 25% auto;
+  grid-template-columns: 30% auto;
   height: 100vh;
 }
 
@@ -255,4 +255,43 @@ gap: 10px;
   background-color: pink;
   overflow-y: auto;
   max-height: calc(100vh - 149px);
+}
+
+.replies-emoji {
+  display: flex;
+  flex-direction: row;
+}
+/* 容器样式 */
+.emoji-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* 悬浮框样式 */
+.tooltip {
+  visibility: hidden;
+  width: 80px;
+  background-color: black;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  
+  /* 定位 */
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -40px; /* 使其居中 */
+  
+  /* 淡入淡出效果 */
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* 当鼠标悬浮在容器上时显示悬浮框 */
+.emoji-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
 }

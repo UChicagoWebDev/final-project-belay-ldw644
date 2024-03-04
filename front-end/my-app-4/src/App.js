@@ -127,7 +127,6 @@ function Splash() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data.unread);
       setUnread(data.unread);
     })};
     // fetchUnread();
@@ -176,9 +175,75 @@ function Splash() {
     })
   }, []);
 
-  const handleClickEmoji = (event) => {
-    console.log(event.target.id);
+  const [emojiText, setEmojiText] = useState([]);
+  const [replyEmojiText, setReplyEmojiText] = useState([]);
+
+  const handleHoverEmoji = (event) => {
+    let emoji_message_id = event.target.attributes.message_id.value;
+    let emoji = event.target.id;
+
+    fetch(API_ADDRESS + `/messages/reactions/get?message_id=${emoji_message_id}&emoji=${emoji}`,{
+    headers: {
+      'Authorization': API_KEY,
+    },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.reaction_text) setEmojiText(data.reaction_text);
+      else setEmojiText("");
+      console.log(data.reaction_text);
+    })
   }
+
+  const handleHoverReplyEmoji = (event) => {
+    let emoji_reply_id = event.target.attributes.reply_id.value;
+    let emoji = event.target.id;
+
+    fetch(API_ADDRESS + `/replies/reactions/get?reply_id=${emoji_reply_id}&emoji=${emoji}`,{
+    headers: {
+      'Authorization': API_KEY,
+    },
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.reaction_text) setReplyEmojiText(data.reaction_text);
+      else setReplyEmojiText("");
+      console.log(data.reaction_text);
+    })
+  }
+
+  
+
+  const handleClickEmoji = (event) => {
+    const params = new URLSearchParams();
+    params.append('message_id', event.target.attributes.message_id.value);
+    params.append('emoji', event.target.id);
+    params.append('display', true);
+
+    fetch(API_ADDRESS + '/messages/reactions/post',{
+    method: 'POST',
+    headers: {
+      'Authorization': API_KEY,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: params})
+  }
+
+  const handleClickReplyEmoji = (event) => {
+    const params = new URLSearchParams();
+    params.append('reply_id', event.target.attributes.reply_id.value);
+    params.append('emoji', event.target.id);
+    params.append('display', true);
+
+    fetch(API_ADDRESS + '/replies/reactions/post',{
+    method: 'POST',
+    headers: {
+      'Authorization': API_KEY,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: params})
+  }
+
   return (
     <div className={columnStyle}>
       <div className="left">
@@ -224,11 +289,22 @@ function Splash() {
                 </div>
                 <div className="replies-avatar-container">
                   <div className="replies-amount" onClick={() => goReply(message.id)}>{message.replies_num === 0 ? 'Reply' : message.replies_num === 1 ? `1 Reply` : `${message.replies_num} Replies`}
-                  
-                    <button id="smile" data-emoji="smile" onClick={handleClickEmoji}>😊</button>
-                    <button id="sad" data-emoji="sad" onClick={handleClickEmoji}>😢</button>
-                    <button id="heart" data-emoji="heart" onClick={handleClickEmoji}>❤️</button>
                   </div>
+                  
+                    <div className="emoji-container">
+                      <button id="smile" message_id={message.id} data-emoji="smile" onClick={handleClickEmoji} onMouseOver={handleHoverEmoji}>😊</button>
+                      <span class="tooltip">Clicked: {emojiText}</span>
+                    </div>
+                    
+                    <div className="emoji-container">
+                      <button id="sad" message_id={message.id} data-emoji="sad" onClick={handleClickEmoji} onMouseOver={handleHoverEmoji}>😢</button>
+                      <span class="tooltip">Clicked: {emojiText}</span>
+                    </div>
+                    <div className="emoji-container">
+                      <button id="heart" message_id={message.id} data-emoji="heart" onClick={handleClickEmoji} onMouseOver={handleHoverEmoji}>❤️</button>
+                      <span class="tooltip">Clicked: {emojiText}</span>
+                    </div>
+                  
                 </div>
                 {message.urls && message.urls.map((url, index2) => (
                   <div className='image-container'>
@@ -268,6 +344,21 @@ function Splash() {
             <div className='reply'>
               <div className='reply-user'>{reply.name}</div>
               <div className='reply-text'>{reply.body}</div>
+              <div>
+                <div className="emoji-container">
+                  <button id="smile" reply_id={reply.id} data-emoji="smile" onClick={handleClickReplyEmoji} onMouseOver={handleHoverReplyEmoji}>😊</button>
+                  <span class="tooltip">Clicked: {replyEmojiText}</span>
+                </div>
+                
+                <div className="emoji-container">
+                  <button id="sad" reply_id={reply.id} data-emoji="sad" onClick={handleClickReplyEmoji} onMouseOver={handleHoverReplyEmoji}>😢</button>
+                  <span class="tooltip">Clicked: {replyEmojiText}</span>
+                </div>
+                <div className="emoji-container">
+                  <button id="heart" reply_id={reply.id} data-emoji="heart" onClick={handleClickReplyEmoji} onMouseOver={handleHoverReplyEmoji}>❤️</button>
+                  <span class="tooltip">Clicked: {replyEmojiText}</span>
+                </div>
+              </div>
             </div>
           )
           )}
@@ -427,7 +518,6 @@ function Profile() {
     body: params})
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       if(data.status === "success"){
         alert("success");
         history.push("/");

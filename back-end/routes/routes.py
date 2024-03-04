@@ -100,7 +100,9 @@ def setup(app, c):
     @c.route("/api/messages/reactions/get")
     def get_reactions_messages_r():
         message_id = request.args['message_id']
-        reaction_text = reactions.get_reactions_messages(message_id)
+        emoji = request.args['emoji']
+        reaction_text = reactions.get_reactions_messages(message_id, emoji)
+        
         if reaction_text:
             return network.return_with_success({"reaction_text": reaction_text, "has_reaction": True})
         else:
@@ -108,8 +110,11 @@ def setup(app, c):
 
     @c.route("/api/replies/reactions/get")
     def get_reactions_replies_r():
+        
         reply_id = request.args['reply_id']
-        reaction_text = reactions.get_reactions_replies(reply_id)
+        emoji = request.args['emoji']
+        
+        reaction_text = reactions.get_reactions_replies(reply_id, emoji)
         if reaction_text:
             return network.return_with_success({"reaction_text": reaction_text, "has_reaction": True})
         else:
@@ -130,7 +135,8 @@ def setup(app, c):
         reply_id = request.form['reply_id']
         emoji = request.form['emoji']
         display = request.form['display']
-        reactions.post_reactions_messages(user, reply_id, emoji, display)
+        print(reply_id, emoji, display)
+        reactions.post_reactions_replies(user, reply_id, emoji, display)
         return network.return_with_success()
     
     @c.route("/api/channels/unread")
