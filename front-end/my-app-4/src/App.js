@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useLocation } from "react-router-dom";
-import { BrowserRouter, Route, useHistory, Switch } from 'react-router-dom';
+import { HashRouter as BrowserRouter, Route, useHistory, Switch } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 var API_KEY = Cookies.get('dingwei_api_key');
