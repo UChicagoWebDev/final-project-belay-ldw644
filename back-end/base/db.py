@@ -16,7 +16,10 @@ def query_db(query, args=(), one=False):
     rows = cursor.fetchall()
     db.commit()
     cursor.close()
+
     if rows:
+        columns = [description[0] for description in cursor.description]
+        rows = [dict(zip(columns, row)) for row in rows]
         if one: 
             return rows[0]
         return rows

@@ -1,10 +1,10 @@
-from flask import jsonify, request, g
+from flask import jsonify, request, g, render_template
 from services import users, channels, messages, replies, reactions
 from base import network, db
 
 def setup(app, c):
 
-    @c.before_request()
+    @c.before_request
     def check_api_key_r():
         api_key = request.headers.get('Authorization')
         user = users.check_api_key(api_key)
@@ -14,14 +14,17 @@ def setup(app, c):
             return network.return_with_unauthorized()
 
     @app.route("/")
-    def home_r():
-        return "Home Page"
+    @app.route("/login")
+    @app.route("/channel/<channel_name>")
+    @c.route("/profile")
+    def home_r(channel_name = None):
+        return render_template("index.html")
     
     @app.route("/api/signup", methods=["POST"])
     def signup_r():
         name = request.form['name']
         password = request.form['password']
-        if users.check_name_availbility('name'):
+        if users.check_name_availbility(name):
             api_key = users.signup(name, password)
             return network.return_with_success({"api_key": api_key})
         else:
@@ -33,7 +36,7 @@ def setup(app, c):
         password = request.form['password']
         api_key = users.login(name, password)
         if api_key:
-            return network.return_with_success()
+            return network.return_with_success({"api_key": api_key})
         else:
             return network.return_with_fail("No such user or wrong password.")
         
@@ -46,19 +49,27 @@ def setup(app, c):
         else:
             return network.return_with_fail("Channel already exist.")
         
-    @c.route("/api/channels/list")
+    @c.route("/api/channels/get")
     def channel_list_r():
-        return network.return_with_success(channels.channel_list())
+        return network.return_with_success({"channels": channels.channel_list()})
     
     @c.route("/api/messages/get")
     def get_messages_r():
+        user = getattr(g, 'user', None)
         channel_id = request.args['channel']
         last_id = request.args['last_id']
-        rows = messages.get_messages(channel_id, last_id)
+        rows = messages.get_messages(user, channel_id, last_id)
+        row = channels.get_channel_name(channel_id)
         num = 0
         if rows:
             num = len(rows)
-        return network.return_with_success({"messages": rows, "num": num})
+        return network.return_with_success({"messages": rows, "num": num, "channel_name": row["name"]})
+    
+    @c.route("/api/messages/get_one")
+    def get_one_message_r():
+        message_id = request.args['message_id']
+        row = messages.get_one_message(message_id)
+        return network.return_with_success({"message": row})
     
     @c.route("/api/messages/post", methods = ["POST"])
     def post_messages_r():
@@ -76,9 +87,9 @@ def setup(app, c):
         num = 0
         if rows:
             num = len(rows)
-        return network.return_with_success({"messages": rows, "num": num})
+        return network.return_with_success({"replies": rows, "num": num})
     
-    @c.route("/api/replies/post", method = ["POST"])
+    @c.route("/api/replies/post", methods = ["POST"])
     def post_replies_r():
         user = getattr(g, 'user', None)
         message_id = request.form['message_id']
@@ -104,7 +115,7 @@ def setup(app, c):
         else:
             return network.return_with_success({"reaction_text": None, "has_reaction": False})
     
-    @c.route("/api/messages/reactions/post")
+    @c.route("/api/messages/reactions/post", methods = ["POST"])
     def post_reactions_messages_r():
         user = getattr(g, 'user', None)
         message_id = request.form['message_id']
@@ -113,8 +124,8 @@ def setup(app, c):
         reactions.post_reactions_messages(user, message_id, emoji, display)
         return network.return_with_success()
     
-    @c.route("/api/replies/reactions/post")
-    def post_reactions_messages_r():
+    @c.route("/api/replies/reactions/post", methods = ["POST"])
+    def post_reactions_replies_r():
         user = getattr(g, 'user', None)
         reply_id = request.form['reply_id']
         emoji = request.form['emoji']
@@ -122,3 +133,29 @@ def setup(app, c):
         reactions.post_reactions_messages(user, reply_id, emoji, display)
         return network.return_with_success()
     
+    @c.route("/api/channels/unread")
+    def get_channels_unread_messages():
+        user = getattr(g, 'user', None)
+        return network.return_with_success({"unread": channels.get_channels_unread_messages(user)})
+    
+    @c.route("/api/users/username/change", methods = ["POST"])
+    def change_username_r():
+        user = getattr(g, 'user', None)
+        name = request.form['name']
+        if users.check_name_availbility(name):
+            users.change_username(user, name)
+            return network.return_with_success()
+        else:
+            return network.return_with_fail("Name already exist.")
+        
+    @c.route("/api/users/password/change", methods = ["POST"])
+    def change_password_r():
+        user = getattr(g, 'user', None)
+        password = request.form['password']
+        users.change_password(user, password)
+        return network.return_with_success()
+    
+    @c.route("/api/users/username/get")
+    def get_username_r():
+        user = getattr(g, 'user', None)
+        return network.return_with_success({"name": users.get_username(user)})

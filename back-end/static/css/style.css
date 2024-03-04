@@ -1,4 +1,4 @@
-body {
+.splash {
     display: grid;
     grid-template-columns: 25% auto;
     height: 100vh;
@@ -98,4 +98,9 @@ body {
 	display: grid;
 	grid-template-columns: max-content max-content max-content max-content;
 	gap: 10px;
+}
+
+.login-username-password {
+    display: grid;
+    grid-template-rows: max-content max-content;
 }

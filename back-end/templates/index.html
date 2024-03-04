@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+	</head>
+	<body>
+		<div class="splash hide">
+			<div class="left">
+				<div class="workspace-name">
+					<b>UChicago CS</b>
+				</div>
+				<div class="channels">
+					<div class="channel"># web-development</div>
+					<div class="channel"># free-food</div>
+				</div>
+			</div>
+			<div class="right">
+				<div class="channel-name"><b># web-development</b></div>
+				<div class="messages-container">
+					<div class="message">
+						<div class="message-avatar">
+							Avatar
+						</div>
+						<div class="message-content">
+							<div class="message-user-time">
+								<div class="message-user">
+									Dingwei Liu
+								</div>
+								<div class="message-time">
+									Now
+								</div>
+							</div>
+							<div class="message-text">
+								Good morning everyone! Here is the weekly newsletter. Good luck with this week!
+								Good morning everyone! Here is the weekly newsletter. Good luck with this week!
+								Good morning everyone! Here is the weekly newsletter. Good luck with this week!
+								Good morning everyone! Here is the weekly newsletter. Good luck with this week!
+							</div>
+							<div class="replies-avatar-container">
+								<div class="replies-avatar hide">
+		
+								</div>
+								<div class="replies-avatar hide">
+
+								</div>
+								<div class="replies-amount">
+									1 Reply
+								</div>
+								<div class="replies-time">
+									Today at 6:42 PM
+								</div>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="login"> <!-- TODO: Show me only on "/login" -->
+			<div>
+				<h3>Enter your username and password to log in:</h3>
+				<div class="login-username-password">
+					<div>
+						Username
+						<input id="login_username"></input>
+						<button onclick="login()">Login</button>
+					</div>
+					<div>
+						 Password
+						<input id="login_password">
+					</div>
+				</div>
+				<h3>Or ... Signup!</h3>
+				<a href onclick="alert('it works')">Signup</button>
+			</div>
+		</div> <!-- end .login -->
+
+	</body>
+</html>

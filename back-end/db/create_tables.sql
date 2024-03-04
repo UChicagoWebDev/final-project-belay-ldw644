@@ -35,7 +35,7 @@ create table reactions_m (
   message_id INTEGER,
   emoji TEXT,
   display BOOLEAN
-)
+);
 
 create table reactions_r (
   id INTEGER PRIMARY KEY,
@@ -43,4 +43,11 @@ create table reactions_r (
   reply_id INTEGER,
   emoji TEXT,
   display BOOLEAN
-)
+);
+
+create table last_read (
+  id INTEGER PRIMARY KEY,
+  user_id INTEGER,
+  channel_id INTEGER,
+  message_id INTEGER
+);

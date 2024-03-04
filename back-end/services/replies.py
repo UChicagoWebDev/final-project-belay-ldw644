@@ -1,7 +1,7 @@
 from base import db
 
 def get_replies(message_id, last_id):
-    sql = """SELECT * FROM replies WHERE message_id = ? and id > ?"""
+    sql = """SELECT *, users.name FROM replies JOIN users ON replies.user_id = users.id WHERE message_id = ? and replies.id > ?"""
     data = (message_id, last_id)
     return db.query_db(sql, data)
 
