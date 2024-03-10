@@ -130,7 +130,7 @@ function Splash() {
       setUnread(data.unread);
     })};
     // fetchUnread();
-    const intervalId = setInterval(fetchUnread, 1000);
+    const intervalId = setInterval(fetchUnread, 500);
     return () => clearInterval(intervalId);
   }, [unread])
 
@@ -155,7 +155,7 @@ function Splash() {
       });
     };
     fetchMessages();
-    const intervalId = setInterval(fetchMessages, 3000);
+    const intervalId = setInterval(fetchMessages, 1000);
 
     return () => clearInterval(intervalId);
   }, [channel_id]);
